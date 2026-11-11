@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FoodRescue AI — لوحة قيادة الأوركسترا</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<style>
+:root{--g:#1F7A4D;--g2:#0E3B2E;--a:#F2A93B;--paper:#F6F4EE;--card:#FFFFFF;--ink:#16231C;--mut:#5E6B63;--line:#E2DED3;--bad:#B3261E;--ok:#1F7A4D;--warn:#9A6200;--r:14px}
+*{box-sizing:border-box}
+body{margin:0;font-family:Tajawal,system-ui,sans-serif;background:var(--paper);color:var(--ink);font-size:15px;line-height:1.55}
+a{color:var(--g)}
+header{position:sticky;top:0;z-index:20;background:var(--g2);color:#fff;display:flex;align-items:center;gap:14px;padding:10px 20px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
+.leaf{width:30px;height:30px;border-radius:50% 0 50% 50%;background:var(--a);transform:rotate(45deg)}
+.brand small{display:block;font-weight:500;font-size:12px;opacity:.75}
+header .sp{flex:1}
+.chip{padding:3px 10px;border-radius:99px;font-size:12px;font-weight:700;background:#ffffff22;white-space:nowrap}
+.chip.ready{background:var(--a);color:var(--g2)}.chip.done{background:#2EA36A}.chip.processing{background:#4C8DD6}.chip.failed{background:var(--bad)}.chip.done_with_skips{background:#C9852A}
+button{font-family:inherit;font-size:14px;border:0;border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:700}
+.btn{background:var(--g);color:#fff}.btn:hover{background:#17633d}
+.btn2{background:#fff;color:var(--g2);border:1px solid var(--line)}
+.btn-out{background:var(--a);color:var(--g2);font-size:15px;padding:9px 18px}
+.btn-sm{padding:5px 10px;font-size:13px}
+.ghost{background:transparent;color:var(--mut);padding:4px 8px}
+select,input,textarea{font-family:inherit;font-size:14px;border:1px solid var(--line);border-radius:9px;padding:7px 9px;background:#fff;color:var(--ink);width:100%}
+textarea{min-height:70px;resize:vertical}
+input[type=color]{padding:2px;height:36px}
+input.badmail{border-color:var(--bad);background:#fff4f3}
+.wrap{display:grid;grid-template-columns:210px 1fr;gap:22px;max-width:1360px;margin:0 auto;padding:22px}
+nav.side{position:sticky;top:76px;align-self:start;display:flex;flex-direction:column;gap:4px}
+nav.side a{text-decoration:none;color:var(--ink);padding:8px 12px;border-radius:9px;font-weight:500}
+nav.side a:hover{background:#e9e5da}
+nav.side .n{display:inline-block;width:22px;color:var(--g);font-weight:800}
+main{display:flex;flex-direction:column;gap:22px;min-width:0}
+section{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px}
+section h2{margin:0 0 4px;font-size:20px;color:var(--g2)}
+section .sub{margin:0 0 16px;color:var(--mut);font-size:13.5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px 16px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mut);font-weight:500}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.right{margin-inline-start:auto}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.kpi .v{font-size:28px;font-weight:800;color:var(--g2);font-variant-numeric:tabular-nums}
+.kpi .l{font-size:13px;color:var(--mut)}
+.kpi .d{font-size:12px;font-weight:700}
+.kpi.hero{background:var(--g);color:#fff;border:0}.kpi.hero .v{color:#fff}.kpi.hero .l{color:#d8efe2}
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{text-align:right;color:var(--mut);font-weight:500;font-size:12.5px;padding:4px 6px;border-bottom:1px solid var(--line)}
+.tbl td{padding:4px 4px;border-bottom:1px solid #f0ede5;vertical-align:top}
+.tbl td input,.tbl td select{padding:5px 6px;font-size:13px}
+.tblwrap{overflow-x:auto}
+.ptabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.ptabs button{background:#eeeae0;color:var(--ink);font-weight:500}
+.ptabs button.on{background:var(--g2);color:#fff}
+.drop{border:2px dashed var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px;background:#fbfaf6}
+.drop.has{border-color:var(--g);background:#f1f8f3}
+.drop h4{margin:0;font-size:15px}
+.drop .meta{font-size:12.5px;color:var(--mut)}
+.uploads{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;max-width:420px}
+.cal .h{font-size:12px;color:var(--mut);text-align:center}
+.cal button{background:#f4f1e8;color:var(--ink);font-weight:500;padding:9px 0;border-radius:8px}
+.cal button.today{outline:2px solid var(--a)}
+.cal button.sel{background:var(--g);color:#fff}
+.cal button:disabled{opacity:.35;cursor:default}
+.calbox{display:flex;gap:26px;flex-wrap:wrap}
+.agents{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.ag{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.ag.off{opacity:.55;background:#f7f6f2}
+.ag .top{display:flex;align-items:flex-start;gap:10px}
+.ag .num{width:30px;height:30px;border-radius:9px;background:var(--g2);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.ag .t{font-weight:800}.ag .c{font-size:12px;color:var(--mut)}
+.sw{position:relative;width:42px;height:24px;flex:none;margin-inline-start:auto}
+.sw input{opacity:0;width:0;height:0}
+.sw span{position:absolute;inset:0;background:#cfcabd;border-radius:99px;transition:.2s;cursor:pointer}
+.sw span:before{content:"";position:absolute;width:18px;height:18px;top:3px;right:3px;background:#fff;border-radius:50%;transition:.2s}
+.sw input:checked+span{background:var(--g)}
+.sw input:checked+span:before{transform:translateX(-18px)}
+.tag{font-size:11.5px;padding:2px 8px;border-radius:99px;background:#eeeae0;color:var(--mut);font-weight:700}
+.tag.custom{background:#fde9c7;color:#8a5a00}
+.note{font-size:13px;color:var(--mut);background:#f7f4ea;border-radius:10px;padding:10px 12px}
+.note.warn{background:#fff3df;color:#7a4b00}
+.list{margin:0;padding:0 18px 0 0}
+.toast{position:fixed;bottom:18px;left:18px;background:var(--g2);color:#fff;padding:10px 16px;border-radius:10px;opacity:0;transition:.3s;z-index:60;pointer-events:none}
+.toast.show{opacity:1}
+/* outputs drawer */
+#out{position:fixed;inset:0;z-index:50;background:#0e3b2ecc;display:none}
+#out.open{display:block}
+#out .panel{position:absolute;inset:3vh 3vw;background:var(--paper);border-radius:18px;display:flex;flex-direction:column;overflow:hidden}
+#out .ph{background:var(--g2);color:#fff;padding:14px 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+#out .ph h3{margin:0;font-size:19px}
+#out .ph select{width:auto}
+#out .body{overflow:auto;padding:18px 20px;display:grid;grid-template-columns:200px 1fr;gap:18px}
+#out .anav{display:flex;flex-direction:column;gap:3px;position:sticky;top:0;align-self:start}
+#out .anav button{background:transparent;color:var(--ink);text-align:right;font-weight:500;padding:7px 10px}
+#out .anav button.on{background:#e3eee7;color:var(--g2);font-weight:800}
+#out .anav .cnt{float:left;color:var(--mut);font-size:12px}
+.agroup{margin-bottom:22px}
+.agroup h4{margin:0 0 10px;font-size:16px;color:var(--g2);display:flex;gap:8px;align-items:center}
+.ocards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.oc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px}
+.oc .k{font-size:12px;font-weight:800;color:var(--g)}
+.oc .tt{font-weight:700}
+.oc .pv{font-size:13px;color:var(--mut);white-space:pre-wrap;max-height:120px;overflow:auto}
+.oc img,.oc video{width:100%;border-radius:8px;background:#eee}
+.empty{color:var(--mut);font-size:13px;padding:10px;border:1px dashed var(--line);border-radius:10px}
+.status-ok{color:var(--ok)}.status-skip{color:var(--warn)}.status-bad{color:var(--bad)}
+@media (max-width:860px){.wrap{grid-template-columns:1fr}nav.side{display:none}#out .body{grid-template-columns:1fr}#out .anav{display:none}#out .panel{inset:0;border-radius:0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="leaf"></div><div><span id="hName">FoodRescue AI</span><small>لوحة قيادة الأوركسترا · منقذ فائض الطعام</small></div></div>
+  <div class="sp"></div>
+  <label class="row" style="gap:6px;color:#d8efe2;font-size:13px">التشغيل
+    <select id="runSel" style="width:auto;padding:5px 8px"></select></label>
+  <span id="runChip" class="chip">—</span>
+  <button class="btn-out" id="openOut">المخرجات</button>
+</header>
+
+<div class="wrap">
+<nav class="side">
+  <a href="#kpis"><span class="n">·</span>مؤشرات الأسبوع</a>
+  <a href="#company"><span class="n">1</span>الشركة والهوية</a>
+  <a href="#people"><span class="n">2</span>الإيميلات والجهات</a>
+  <a href="#week"><span class="n">3</span>ملفات الأسبوع</a>
+  <a href="#meeting"><span class="n">4</span>الاجتماع القادم</a>
+  <a href="#agents"><span class="n">5</span>الوكلاء</a>
+  <a href="#assumptions"><span class="n">6</span>الافتراضات والسجل</a>
+</nav>
+<main>
+  <div id="conn" class="note warn" style="display:none"></div>
+
+  <div id="kpis">
+    <div class="kpis" id="kpiGrid"></div>
+  </div>
+
+  <section id="company">
+    <h2>1 · بيانات الشركة والمنتج والهوية</h2>
+    <p class="sub">يقرؤها كل الوكلاء. الحقول الفارغة تأخذ افتراضًا يُسجَّل في قسم الافتراضات.</p>
+    <div class="grid" id="companyForm"></div>
+    <div class="row" style="margin-top:14px"><span class="note" style="flex:1">وضع البريد: <b>إرسال تلقائي</b> لكل بريد مسجّل في القسم 2 فقط. يمكن التحويل إلى «مسودات» من هنا.</span>
+      <button class="btn" id="saveCompany">حفظ بيانات الشركة</button></div>
+  </section>
+
+  <section id="people">
+    <h2>2 · الإيميلات: الفريق، الإدارة، المؤسسات المتبرعة، الجهات المستقبلة</h2>
+    <p class="sub">لا يُرسل أي وكيل لأي عنوان غير موجود هنا. لا تُدخلي بيانات أطفال أو عائلات — التوزيع للعائلات عبر جهة وسيطة فقط.</p>
+    <div class="ptabs" id="ptabs"></div>
+    <div class="tblwrap"><table class="tbl" id="ptable"></table></div>
+    <div class="row" style="margin-top:12px"><button class="btn2 btn-sm" id="addRow">+ إضافة صف</button><span class="right"></span><button class="btn" id="savePeople">حفظ الإيميلات والجهات</button></div>
+  </section>
+
+  <section id="week">
+    <h2>3 · ملفات الأسبوع</h2>
+    <p class="sub">اختاري تاريخ الاجتماع، ارفعي الملفات، ثم اضغطي «جاهز للتشغيل». يقبل CSV وExcel وWord ونصًا ملصوقًا.</p>
+    <div class="row" style="margin-bottom:14px">
+      <label class="f" style="width:190px">تاريخ الاجتماع (التشغيل)<input type="date" id="runDate"></label>
+      <button class="btn2" id="openRun">فتح / إنشاء التشغيل</button>
+      <span class="right"></span>
+      <button class="btn" id="markReady">جاهز للتشغيل ▶</button>
+    </div>
+    <div class="uploads">
+      <div class="drop" id="dCur"><h4>بيانات الفائض — الأسبوع الحالي</h4><input type="file" accept=".csv,.xlsx,.xls" data-slot="current"><div class="meta"></div></div>
+      <div class="drop" id="dPrev"><h4>بيانات الفائض — الأسبوع السابق</h4><input type="file" accept=".csv,.xlsx,.xls" data-slot="prev"><div class="meta"></div></div>
+      <div class="drop" id="dMin"><h4>محضر الاجتماع</h4><input type="file" accept=".docx,.txt,.md" data-slot="minutes"><textarea id="minText" placeholder="أو الصقي نص المحضر هنا"></textarea><button class="btn2 btn-sm" id="saveMinText">حفظ النص</button><div class="meta"></div></div>
+      <div class="drop" id="dCo"><h4>ملفات وبيانات الشركة</h4><input type="file" multiple accept=".pdf,.png,.jpg,.jpeg,.csv,.xlsx,.docx,.txt,.md" data-slot="company"><div class="meta"></div></div>
+    </div>
+    <label class="f" style="margin-top:14px">ملاحظات للمدير (بيانات لا أوامر)<textarea id="runNotes"></textarea></label>
+    <div class="row" style="margin-top:8px"><span class="right"></span><button class="btn2 btn-sm" id="saveNotes">حفظ الملاحظات</button></div>
+  </section>
+
+  <section id="meeting">
+    <h2>4 · تقويم الاجتماع القادم</h2>
+    <p class="sub">يرسل «مُجدول الاجتماعات» دعوة Google Calendar رسمية للفريق والإدارة والمدعوين فقط.</p>
+    <div class="calbox">
+      <div>
+        <div class="row" style="margin-bottom:8px"><button class="ghost" id="calPrev">‹ السابق</button><b id="calTitle" style="flex:1;text-align:center"></b><button class="ghost" id="calNext">التالي ›</button></div>
+        <div class="cal" id="cal"></div>
+      </div>
+      <div class="grid" style="flex:1;min-width:260px;align-content:start">
+        <label class="f">التاريخ المختار<input id="nmDate" readonly></label>
+        <label class="f">الوقت<input type="time" id="nmTime" value="10:00"></label>
+        <label class="f">المدة (دقيقة)<select id="nmDur"><option>30</option><option selected>60</option><option>90</option><option>120</option></select></label>
+        <label class="f">المكان<input id="nmLoc" placeholder="Google Meet / مقر المشروع"></label>
+        <label class="f">رابط Meet<select id="nmMeet"><option value="true">نعم</option><option value="false">لا</option></select></label>
+        <div class="row"><button class="btn" id="saveMeeting">حفظ الموعد في التشغيل</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="agents">
+    <h2>5 · الوكلاء — المدخلات والتفعيل</h2>
+    <p class="sub">كل وكيل منفصل وله Skill خاص. الوكيل المُوقف يُتخطّى ويُسجَّل. الوكلاء الجدد من «مضيف الوكلاء» يظهرون هنا تلقائيًا.</p>
+    <div class="agents" id="agentGrid"></div>
+    <div class="row" style="margin-top:14px"><span class="note" style="flex:1">لإضافة وكيل: اكتبي الطلب في بطاقة «مضيف الوكلاء» واحفظي، ثم اكتبي في المحادثة <b>/add-agent</b>.</span><button class="btn" id="saveAgents">حفظ إعدادات الوكلاء</button></div>
+  </section>
+
+  <section id="assumptions">
+    <h2>6 · الافتراضات المسجّلة وسجل الخطوات</h2>
+    <p class="sub">بدل الأسئلة: كل معلومة ناقصة اختير لها افتراض وسُجّل هنا. عدّلي الحقل المعني لإلغائه.</p>
+    <div class="tblwrap"><table class="tbl" id="asmTable"></table></div>
+    <h3 style="font-size:16px;margin:18px 0 8px;color:var(--g2)">سجل التشغيل المختار</h3>
+    <ol class="list" id="logList"></ol>
+  </section>
+</main>
+</div>
+
+<div id="out" role="dialog" aria-label="المخرجات">
+  <div class="panel">
+    <div class="ph"><h3>المخرجات</h3><select id="outRun"></select><span id="outCount" class="chip"></span><span class="sp" style="flex:1"></span><button class="btn2 btn-sm" id="closeOut">إغلاق ✕</button></div>
+    <div class="body"><div class="anav" id="anav"></div><div id="ogroups"></div></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const AGENTS_FALLBACK = [{"id": "maestro-control-panel", "label": "لوحة القيادة", "phase": "setup", "order": 1, "depends_on": [], "connector": "Artifacts DB", "output_kinds": ["data"], "inputs": [{"key": "dashboard_title", "label": "عنوان اللوحة", "type": "text", "default": "FoodRescue AI — لوحة قيادة الأوركسترا"}]}, {"id": "maestro-gatekeeper", "label": "حارس المدخلات", "phase": "0", "order": 2, "depends_on": ["maestro-control-panel"], "connector": "Google Drive", "output_kinds": ["data"], "inputs": [{"key": "custom_column_map", "label": "مطابقة أعمدة مخصصة (JSON: العمود القياسي → عمود ملفك)", "type": "textarea", "default": ""}, {"key": "backup_to_drive", "label": "نسخة احتياطية في Drive", "type": "bool", "default": true}]}, {"id": "maestro-scribe", "label": "سكرتير الاجتماع", "phase": "1", "order": 3, "depends_on": ["maestro-gatekeeper"], "connector": "—", "output_kinds": ["minutes", "tasks"], "inputs": [{"key": "default_due_days", "label": "موعد افتراضي للمهمة بلا موعد (أيام)", "type": "number", "default": 7}]}, {"id": "maestro-analyst", "label": "محلل البيانات", "phase": "1", "order": 4, "depends_on": ["maestro-gatekeeper"], "connector": "—", "output_kinds": ["excel", "report", "data"], "inputs": [{"key": "meal_kg", "label": "وزن الوجبة (كغ)", "type": "number", "default": 0.4}, {"key": "co2e_per_kg", "label": "عامل CO2e لكل كغ منقذ", "type": "number", "default": 2.5}, {"key": "room_temp_max_h", "label": "أقصى ساعات للمطبوخ بحرارة الغرفة", "type": "number", "default": 2}, {"key": "cooked_chilled_max_h", "label": "أقصى ساعات للمطبوخ المبرد/الساخن", "type": "number", "default": 48}, {"key": "min_quality_score", "label": "الحد الأدنى لجودة البيانات", "type": "number", "default": 60}, {"key": "management_questions", "label": "أسئلة الإدارة (سطر لكل سؤال)", "type": "textarea", "default": "ما الصنف الأكثر هدرًا؟\nكم وجبة وُجهت للجمعيات؟"}]}, {"id": "maestro-scout", "label": "راصد السوق", "phase": "1", "order": 5, "depends_on": ["maestro-gatekeeper"], "connector": "Perplexity (احتياطي: بحث الويب)", "output_kinds": ["market"], "inputs": [{"key": "keywords", "label": "كلمات البحث", "type": "textarea", "default": "food waste Palestine\nهدر الطعام فلسطين\nبنك الطعام\nfood rescue app\nسماد عضوي فلسطين"}, {"key": "competitors", "label": "منافسون معروفون", "type": "textarea", "default": "Too Good To Go\nOLIO\nWinnow\nLeanpath\nFoodCloud"}, {"key": "window_days", "label": "نافذة الأخبار (أيام)", "type": "number", "default": 30}]}, {"id": "maestro-rewards", "label": "مسؤول الولاء", "phase": "2", "order": 6, "depends_on": ["maestro-analyst"], "connector": "—", "output_kinds": ["card", "data"], "inputs": [{"key": "per_kg_human", "label": "نقاط لكل كغ للتوزيع", "type": "number", "default": 1}, {"key": "per_kg_compost", "label": "نقاط لكل كغ سماد", "type": "number", "default": 0.5}, {"key": "suspicious_dispose_share", "label": "نسبة إتلاف تعلّق المؤسسة", "type": "number", "default": 0.3}]}, {"id": "maestro-tasker", "label": "موزّع المهام", "phase": "2", "order": 7, "depends_on": ["maestro-scribe"], "connector": "monday.com", "output_kinds": ["tasks"], "inputs": [{"key": "board_id", "label": "معرّف لوحة monday (فارغ = تُنشأ)", "type": "text", "default": ""}]}, {"id": "maestro-studio", "label": "مصمم البوستات", "phase": "3", "order": 8, "depends_on": ["maestro-analyst", "maestro-rewards"], "connector": "Canva", "output_kinds": ["post"], "inputs": [{"key": "brand_kit_id", "label": "Brand Kit في Canva (اختياري)", "type": "text", "default": ""}, {"key": "hashtags", "label": "وسوم ثابتة", "type": "text", "default": "#FoodRescueAI #لا_للهدر #إنقاذ_الطعام"}]}, {"id": "maestro-presenter", "label": "معدّ العرض", "phase": "3", "order": 9, "depends_on": ["maestro-analyst", "maestro-scribe", "maestro-scout"], "connector": "Gamma", "output_kinds": ["deck"], "inputs": [{"key": "theme", "label": "ثيم Gamma (اختياري)", "type": "text", "default": ""}]}, {"id": "maestro-filmmaker", "label": "وكيل الفيديو", "phase": "3", "order": 10, "depends_on": ["maestro-analyst"], "connector": "HyperFrames by HeyGen", "output_kinds": ["video"], "inputs": [{"key": "duration_s", "label": "المدة (ثانية)", "type": "number", "default": 35}, {"key": "cta", "label": "الدعوة للإجراء", "type": "text", "default": "سجّل مؤسستك وأنقذ فائضك"}]}, {"id": "maestro-vault", "label": "أمين الأرشيف", "phase": "4", "order": 11, "depends_on": [], "connector": "Google Drive", "output_kinds": ["archive"], "inputs": [{"key": "drive_folder", "label": "مجلد Drive", "type": "text", "default": "FoodRescue AI — Orchestra"}]}, {"id": "maestro-scheduler", "label": "مُجدول الاجتماعات", "phase": "5", "order": 12, "depends_on": ["maestro-scribe"], "connector": "Google Calendar", "output_kinds": ["invite"], "inputs": [{"key": "add_meet", "label": "إضافة Google Meet", "type": "bool", "default": true}]}, {"id": "maestro-courier", "label": "منسق البريد", "phase": "5", "order": 13, "depends_on": ["maestro-scheduler"], "connector": "Gmail", "output_kinds": ["email"], "inputs": [{"key": "email_mode", "label": "وضع البريد (send = إرسال تلقائي / drafts = مسودات)", "type": "select", "options": ["send", "drafts"], "default": "send"}]}, {"id": "maestro-showcase", "label": "واجهة المخرجات", "phase": "after-each", "order": 14, "depends_on": [], "connector": "Artifacts DB", "output_kinds": ["data"], "inputs": [{"key": "preview_chars", "label": "طول المعاينة", "type": "number", "default": 600}]}, {"id": "maestro-agent-host", "label": "مضيف الوكلاء", "phase": "on-demand", "order": 15, "depends_on": [], "connector": "Artifacts DB", "output_kinds": ["data"], "inputs": [{"key": "new_agent_request", "label": "اطلبي وكيلًا جديدًا (الاسم + ماذا يفعل + الموصل)", "type": "textarea", "default": ""}]}, {"id": "maestro-app-designer", "label": "مصمم التطبيق", "phase": "4", "order": 16, "depends_on": ["maestro-analyst", "maestro-rewards", "maestro-studio", "maestro-presenter", "maestro-filmmaker", "maestro-tasker"], "connector": "Claude Design + Netlify", "output_kinds": ["data"], "inputs": [{"key": "app_title", "label": "اسم التطبيق", "type": "text", "default": "FoodRescue AI — منقذ فائض الطعام"}, {"key": "app_url", "label": "رابط التطبيق (يُملأ تلقائيًا بعد أول نشر)", "type": "text", "default": ""}, {"key": "design_project_id", "label": "معرّف مشروع Claude Design (يُملأ تلقائيًا)", "type": "text", "default": ""}, {"key": "whatsapp_number", "label": "رقم واتساب العام للتواصل (رقم المؤسسة لا شخص)", "type": "text", "default": ""}, {"key": "redesign", "label": "إعادة التصميم من جديد في التشغيل القادم (مرة واحدة)", "type": "bool", "default": false}]}];
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const safeUrl = u => /^https:\/\//i.test(String(u||"")) ? String(u) : "";
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const toast = m => { const t=$("#toast"); t.textContent=m; t.classList.add("show"); clearTimeout(toast.h); toast.h=setTimeout(()=>t.classList.remove("show"),2600); };
+const today = () => new Date().toISOString().slice(0,10);
+
+let db=null, assets=null, user=null, canWrite=true;
+const S = {company:null, people:null, agents:null, assumptions:[], registry:[], runs:{}, outputs:[], kpis:{}, log:[], run:null};
+let ptab="team";
+
+/* ---------- company form ---------- */
+const CF = [
+  ["name","اسم الشركة"],["name_ar","الاسم بالعربية"],["product","المنتج"],["tagline","الشعار النصي"],["sector","القطاع"],["city","المدينة"],
+  ["regions","المناطق (بفواصل)","list"],["currency","العملة"],["timezone","المنطقة الزمنية"],
+  ["brand.primary","اللون الأساسي","color"],["brand.secondary","اللون الثانوي","color"],["brand.accent","لون التمييز","color"],
+  ["brand.font","الخط"],["brand.tone","النبرة"],["brand.banned_claims","ادعاءات ممنوعة (بفواصل)","list"],
+  ["drive_folder","مجلد Google Drive"],["monday_board_id","معرّف لوحة monday"],["meal_kg","وزن الوجبة (كغ)","number"],["co2e_per_kg","عامل CO2e/كغ","number"],
+  ["automation.email_mode","وضع البريد","sel:send=إرسال تلقائي (افتراضي),drafts=مسودات"],["automation.calendar_mode","وضع التقويم","sel:invite=دعوة رسمية,tentative=مبدئي"]];
+const getP=(o,p)=>p.split(".").reduce((a,k)=>a&&a[k],o);
+const setP=(o,p,v)=>{const ks=p.split(".");let c=o;ks.slice(0,-1).forEach(k=>{c[k]=c[k]&&typeof c[k]==="object"?c[k]:{};c=c[k]});c[ks.at(-1)]=v;};
+function renderCompany(){
+  const c=S.company||{};
+  $("#companyForm").innerHTML = CF.map(([k,l,t])=>{
+    let v=getP(c,k); if(t==="list") v=(v||[]).join("، ");
+    if(t&&t.startsWith("sel:")){const opts=t.slice(4).split(",").map(x=>x.split("="));
+      return `<label class="f">${esc(l)}<select data-k="${k}">${opts.map(([a,b])=>`<option value="${a}" ${v===a?"selected":""}>${esc(b)}</option>`).join("")}</select></label>`;}
+    return `<label class="f">${esc(l)}<input data-k="${k}" data-t="${t||""}" type="${t==="color"?"color":t==="number"?"number":"text"}" step="any" value="${esc(v??(t==="color"?"#1F7A4D":""))}"></label>`;
+  }).join("") + `<label class="f">الشعار (صورة)<input type="file" accept=".png,.jpg,.jpeg,.svg" id="logoIn"><span class="meta" id="logoMeta">${c.brand&&c.brand.logo_asset_id?"✓ مرفوع":""}</span></label>`;
+  $("#hName").textContent = c.name || "FoodRescue AI";
+  $("#logoIn").onchange = async e => { const f=e.target.files[0]; if(!f) return; const r=await upload(f); if(r){ S.company=S.company||{}; S.company.brand=S.company.brand||{}; S.company.brand.logo_asset_id=r.id; $("#logoMeta").textContent="✓ مرفوع — احفظي"; } };
+}
+$("#saveCompany").onclick = async () => {
+  const c = structuredClone(S.company||{});
+  document.querySelectorAll("#companyForm [data-k]").forEach(i=>{let v=i.value; const t=i.dataset.t;
+    if(t==="list") v=v.split(/[،,]/).map(x=>x.trim()).filter(Boolean); else if(t==="number") v=v===""?"":Number(v); setP(c,i.dataset.k,v);});
+  await write("config/company", c, "حُفظت بيانات الشركة");
+};
+
+/* ---------- people ---------- */
+const PT = {
+  team:{l:"الفريق",cols:[["name","الاسم"],["email","البريد","email"],["role","الدور"]]},
+  management:{l:"الإدارة",cols:[["name","الاسم"],["email","البريد","email"],["role","الدور"]]},
+  invitees:{l:"مدعوون إضافيون",cols:[["name","الاسم"],["email","البريد","email"]]},
+  donors:{l:"المؤسسات المتبرعة (الزبائن)",cols:[["id","الرمز"],["name","الاسم"],["type","النوع","sel:restaurant,canteen,hotel,university,school,bakery,internal"],["region","المنطقة"],["email","البريد","email"],["consent_public","موافقة النشر","sel:no,yes"]]},
+  partners:{l:"الجهات المستقبلة",cols:[["id","الرمز"],["name","الاسم"],["type","النوع","sel:orphanage,charity,food_bank,intermediary,compost,collection_point,municipality"],["region","المنطقة"],["email","البريد","email"],["accepts","يقبل (بفواصل)","list"],["min_qty","حد أدنى كغ"],["capacity_kg","سعة كغ"],["pickup_window","وقت الاستلام"],["transport","نقل","sel:no,yes"],["verified","موثّقة","sel:no,yes"],["last_verified","آخر تحقق","date"]]}};
+function renderPeople(){
+  $("#ptabs").innerHTML = Object.entries(PT).map(([k,v])=>`<button data-t="${k}" class="${k===ptab?"on":""}">${esc(v.l)} <span class="tag">${((S.people||{})[k]||[]).length}</span></button>`).join("");
+  $("#ptabs").querySelectorAll("button").forEach(b=>b.onclick=()=>{collectPeople();ptab=b.dataset.t;renderPeople();});
+  const def=PT[ptab], rows=((S.people||{})[ptab]||[]);
+  $("#ptable").innerHTML = `<tr>${def.cols.map(c=>`<th>${esc(c[1])}</th>`).join("")}<th></th></tr>` + rows.map((r,i)=>`<tr data-i="${i}">${def.cols.map(([k,,t])=>{
+      let v=r[k]; if(t==="list") v=(v||[]).join(", ");
+      if(t&&t.startsWith("sel:")) return `<td><select data-k="${k}">${t.slice(4).split(",").map(o=>`<option ${String(v)===o?"selected":""}>${o}</option>`).join("")}</select></td>`;
+      return `<td><input data-k="${k}" data-t="${t||""}" type="${t==="date"?"date":"text"}" value="${esc(v)}" class="${t==="email"&&v&&!EMAIL.test(v)?"badmail":""}"></td>`;}).join("")}<td><button class="ghost" data-del="${i}" title="حذف الصف">✕</button></td></tr>`).join("") || "";
+  if(!rows.length) $("#ptable").innerHTML += `<tr><td colspan="9" class="empty">لا صفوف بعد — أضيفي صفًا.</td></tr>`;
+  $("#ptable").querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{collectPeople();S.people[ptab].splice(+b.dataset.del,1);renderPeople();});
+  $("#ptable").querySelectorAll("input[data-t=email]").forEach(i=>i.oninput=()=>i.classList.toggle("badmail",!!i.value&&!EMAIL.test(i.value)));
+}
+function collectPeople(){
+  S.people=S.people||{}; const def=PT[ptab];
+  S.people[ptab] = [...$("#ptable").querySelectorAll("tr[data-i]")].map(tr=>{const o={}; tr.querySelectorAll("[data-k]").forEach(i=>{let v=i.value.trim(); if(i.dataset.t==="list") v=v.split(/[،,]/).map(x=>x.trim()).filter(Boolean); o[i.dataset.k]=v;}); return o;});
+}
+$("#addRow").onclick=()=>{collectPeople();S.people[ptab]=S.people[ptab]||[];S.people[ptab].push({});renderPeople();};
+$("#savePeople").onclick=async()=>{collectPeople();
+  const bad=Object.values(S.people).flat().filter(r=>r.email&&!EMAIL.test(r.email)); if(bad.length) toast(`تنبيه: ${bad.length} بريد بصيغة خاطئة — لن يُستخدم`);
+  await write("config/people", S.people, "حُفظت الإيميلات والجهات");};
+
+/* ---------- runs & uploads ---------- */
+function runIds(){ return Object.keys(S.runs).sort((a,b)=>(a.startsWith("rehearsal")-b.startsWith("rehearsal"))||b.localeCompare(a)); }
+function renderRunSel(){
+  const ids=runIds(); const cur=S.run;
+  const opts = ids.map(id=>`<option value="${id}" ${id===cur?"selected":""}>${id}</option>`).join("") || `<option value="">لا تشغيلات</option>`;
+  $("#runSel").innerHTML=opts; $("#outRun").innerHTML=opts;
+  const r=S.runs[cur]; const st=r?r.status:"—";
+  const AR={draft:"مسودة",ready:"جاهز",processing:"قيد التشغيل",done:"اكتمل",done_with_skips:"اكتمل مع تخطٍّ",failed:"فشل",rehearsal:"بروفة"};
+  $("#runChip").className="chip "+(st||""); $("#runChip").textContent=AR[st]||st;
+  $("#runDate").value=cur||today();
+  renderUploads(); renderKpis(); renderLog(); renderMeeting();
+}
+$("#runSel").onchange=e=>{S.run=e.target.value;renderRunSel();};
+$("#openRun").onclick=async()=>{const d=$("#runDate").value; if(!d) return toast("اختاري تاريخًا");
+  if(!S.runs[d]) await write("runs/"+d,{status:"draft",meeting_date:d,company_files:[],created_at:new Date().toISOString()},"أُنشئ التشغيل "+d);
+  S.run=d; renderRunSel();};
+$("#markReady").onclick=async()=>{const r=S.runs[S.run]; if(!r) return toast("افتحي تشغيلًا أولًا");
+  const miss=[]; if(!r.current_asset_id&&!r.current_csv) miss.push("ملف الفائض"); if(!r.minutes_text&&!r.minutes_asset_id) miss.push("المحضر");
+  await patchRun({status:"ready",ready_at:new Date().toISOString()}); toast(miss.length?"جاهز — سيُتخطّى ما يعتمد على: "+miss.join("، "):"التشغيل جاهز ✓ سيلتقطه المايسترو");};
+function renderUploads(){
+  const r=S.runs[S.run]||{};
+  const m=(id,txt,has)=>{$(id).classList.toggle("has",!!has);$(id+" .meta").innerHTML=txt||"لم يُرفع بعد";};
+  m("#dCur", r.current_name?`✓ ${esc(r.current_name)} · ${r.current_rows??"?"} صف · أعمدة: ${esc((r.current_headers||[]).slice(0,6).join("، "))}…`:"", r.current_asset_id||r.current_csv);
+  m("#dPrev", r.prev_name?`✓ ${esc(r.prev_name)} · ${r.prev_rows??"?"} صف`:"", r.prev_asset_id||r.prev_csv);
+  m("#dMin", r.minutes_name?`✓ ${esc(r.minutes_name)} · ${(r.minutes_text||"").length} حرف`:(r.minutes_text?`✓ نص ملصوق · ${r.minutes_text.length} حرف`:""), r.minutes_text||r.minutes_asset_id);
+  m("#dCo", (r.company_files||[]).map(f=>"✓ "+esc(f.name)).join("<br>"), (r.company_files||[]).length);
+  if(document.activeElement!==$("#minText")) $("#minText").value=r.minutes_text&&!r.minutes_name?r.minutes_text:"";
+  if(document.activeElement!==$("#runNotes")) $("#runNotes").value=r.notes||"";
+}
+async function upload(blobOrFile,name){
+  if(!assets){toast("رفع الملفات متاح للمحررين فقط");return null;}
+  try{ const r=await assets.upload(blobOrFile); return r; }catch(e){ toast("تعذّر الرفع: "+(e.message||e.code)); return null; }
+}
+async function fileToCsv(f){
+  if(/\.(xlsx|xls)$/i.test(f.name)){ const wb=XLSX.read(await f.arrayBuffer(),{type:"array",cellDates:true}); return XLSX.utils.sheet_to_csv(wb.Sheets[wb.SheetNames[0]],{dateNF:"yyyy-mm-dd hh:mm"}); }
+  return await f.text();
+}
+async function docxToText(f){ const r=await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()}); return r.value; }
+function csvInfo(csv){ const lines=csv.split(/\r?\n/).filter(x=>x.trim()); return {rows:Math.max(0,lines.length-1), headers:(lines[0]||"").split(",").map(x=>x.replace(/^"|"$/g,"").trim())}; }
+document.querySelectorAll(".drop input[type=file]").forEach(inp=>inp.onchange=async e=>{
+  if(!S.runs[S.run]) return toast("افتحي/أنشئي التشغيل أولًا (القسم 3)");
+  const slot=inp.dataset.slot, files=[...e.target.files]; if(!files.length) return;
+  try{
+    if(slot==="current"||slot==="prev"){
+      const f=files[0], csv=await fileToCsv(f), info=csvInfo(csv);
+      const a=await upload(new Blob([csv],{type:"text/csv"}));
+      const p={[slot+"_name"]:f.name,[slot+"_rows"]:info.rows,[slot+"_headers"]:info.headers,[slot+"_asset_id"]:a?a.id:""};
+      if(csv.length<180000) p[slot+"_csv"]=csv;
+      await patchRun(p); toast(`رُفع ${f.name} (${info.rows} صف)`);
+    } else if(slot==="minutes"){
+      const f=files[0], txt=/\.docx$/i.test(f.name)?await docxToText(f):await f.text();
+      const a=await upload(new Blob([txt],{type:"text/markdown"}));
+      await patchRun({minutes_name:f.name,minutes_text:txt.slice(0,180000),minutes_asset_id:a?a.id:""}); toast("رُفع المحضر");
+    } else {
+      const list=[...(S.runs[S.run].company_files||[])];
+      for(const f of files){ let blob=f, kind="file";
+        if(/\.(xlsx|xls)$/i.test(f.name)){blob=new Blob([await fileToCsv(f)],{type:"text/csv"});kind="table";}
+        else if(/\.docx$/i.test(f.name)){blob=new Blob([await docxToText(f)],{type:"text/markdown"});kind="text";}
+        const a=await upload(blob); if(a) list.push({asset_id:a.id,name:f.name,kind});}
+      await patchRun({company_files:list}); toast("رُفعت ملفات الشركة");
+    }
+  }catch(err){ toast("تعذّرت قراءة الملف: "+(err.message||err)); }
+  inp.value="";
+});
+$("#saveMinText").onclick=async()=>{ if(!S.runs[S.run]) return toast("افتحي التشغيل أولًا"); await patchRun({minutes_text:$("#minText").value.slice(0,180000),minutes_name:""}); toast("حُفظ نص المحضر"); };
+$("#saveNotes").onclick=async()=>{ if(!S.runs[S.run]) return toast("افتحي التشغيل أولًا"); await patchRun({notes:$("#runNotes").value}); toast("حُفظت الملاحظات"); };
+async function patchRun(p){ const r=S.runs[S.run]; if(!r) return; await write("runs/"+S.run,{...r,...p,updated_at:new Date().toISOString()},null); }
+
+/* ---------- calendar ---------- */
+let calM=new Date(); calM.setDate(1); let calSel=null;
+function renderMeeting(){
+  const nm=(S.runs[S.run]||{}).next_meeting;
+  if(nm){ calSel=nm.date; $("#nmTime").value=nm.time||"10:00"; $("#nmDur").value=String(nm.duration_min||60); $("#nmLoc").value=nm.location||""; $("#nmMeet").value=String(nm.meet!==false); const d=new Date(nm.date+"T00:00"); if(!isNaN(d)){calM=new Date(d.getFullYear(),d.getMonth(),1);} }
+  else if(!calSel && S.run){ const d=new Date(S.run+"T00:00"); d.setDate(d.getDate()+7); calSel=d.toISOString().slice(0,10); }
+  $("#nmDate").value=calSel||""; drawCal();
+}
+function drawCal(){
+  const y=calM.getFullYear(), m=calM.getMonth(); const names=["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+  $("#calTitle").textContent=names[m]+" "+y;
+  const first=new Date(y,m,1).getDay(), days=new Date(y,m+1,0).getDate(), t=today();
+  let h=["أحد","اثنين","ثلاثاء","أربعاء","خميس","جمعة","سبت"].map(d=>`<div class="h">${d}</div>`).join("");
+  for(let i=0;i<first;i++) h+="<div></div>";
+  for(let d=1;d<=days;d++){ const ds=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+    h+=`<button data-d="${ds}" class="${ds===t?"today":""} ${ds===calSel?"sel":""}" ${ds<t?"disabled":""}>${d}</button>`; }
+  $("#cal").innerHTML=h; $("#cal").querySelectorAll("button[data-d]").forEach(b=>b.onclick=()=>{calSel=b.dataset.d;$("#nmDate").value=calSel;drawCal();});
+}
+$("#calPrev").onclick=()=>{calM.setMonth(calM.getMonth()-1);drawCal();};
+$("#calNext").onclick=()=>{calM.setMonth(calM.getMonth()+1);drawCal();};
+$("#saveMeeting").onclick=async()=>{ if(!S.runs[S.run]) return toast("افتحي التشغيل أولًا (القسم 3)"); if(!calSel) return toast("اختاري يومًا");
+  await patchRun({next_meeting:{date:calSel,time:$("#nmTime").value,duration_min:+$("#nmDur").value,location:$("#nmLoc").value,meet:$("#nmMeet").value==="true"}}); toast("حُفظ موعد الاجتماع القادم "+calSel);};
+
+/* ---------- agents ---------- */
+function registry(){ const r=S.registry.length?S.registry:AGENTS_FALLBACK; return [...r].sort((a,b)=>(a.order||99)-(b.order||99)); }
+const PH={setup:"إعداد","0":"المرحلة 0","1":"المرحلة 1","2":"المرحلة 2","3":"المرحلة 3","4":"المرحلة 4","5":"المرحلة 5","after-each":"بعد كل وكيل","on-demand":"عند الطلب"};
+function renderAgents(){
+  const cfg=S.agents||{};
+  $("#agentGrid").innerHTML=registry().map((a,i)=>{const c=cfg[a.id]||{enabled:true,inputs:{}}; const on=c.enabled!==false;
+    const ins=(a.inputs||[]).map(f=>{const v=(c.inputs||{})[f.key]??f.default??"";
+      if(f.type==="bool") return `<label class="f">${esc(f.label)}<select data-a="${a.id}" data-k="${f.key}" data-t="bool"><option value="true" ${String(v)==="true"?"selected":""}>نعم</option><option value="false" ${String(v)==="false"?"selected":""}>لا</option></select></label>`;
+      if(f.type==="select") return `<label class="f">${esc(f.label)}<select data-a="${a.id}" data-k="${f.key}">${(f.options||[]).map(o=>`<option ${v===o?"selected":""}>${esc(o)}</option>`).join("")}</select></label>`;
+      if(f.type==="textarea") return `<label class="f">${esc(f.label)}<textarea data-a="${a.id}" data-k="${f.key}">${esc(v)}</textarea></label>`;
+      return `<label class="f">${esc(f.label)}<input data-a="${a.id}" data-k="${f.key}" data-t="${f.type}" type="${f.type==="number"?"number":"text"}" step="any" value="${esc(v)}"></label>`;}).join("");
+    return `<div class="ag ${on?"":"off"}" data-card="${a.id}"><div class="top"><div class="num">${i+1}</div><div><div class="t">${esc(a.label)}</div><div class="c">${esc(a.id)} · ${esc(a.connector||"—")}</div></div>
+      <label class="sw" title="تفعيل/إيقاف"><input type="checkbox" data-en="${a.id}" ${on?"checked":""}><span></span></label></div>
+      <div class="row"><span class="tag">${esc(PH[a.phase]||a.phase)}</span>${a.custom?'<span class="tag custom">مضاف</span>':""}${(a.depends_on||[]).length?`<span class="tag">يعتمد: ${(a.depends_on||[]).length}</span>`:""}</div>${ins}</div>`;}).join("");
+  $("#agentGrid").querySelectorAll("[data-en]").forEach(x=>x.onchange=()=>x.closest(".ag").classList.toggle("off",!x.checked));
+}
+$("#saveAgents").onclick=async()=>{ const cfg=structuredClone(S.agents||{});
+  registry().forEach(a=>{cfg[a.id]=cfg[a.id]||{inputs:{}}; cfg[a.id].inputs=cfg[a.id].inputs||{}; cfg[a.id].enabled=$(`[data-en="${a.id}"]`).checked;});
+  document.querySelectorAll("#agentGrid [data-a]").forEach(i=>{let v=i.value; if(i.dataset.t==="number") v=v===""?"":Number(v); if(i.dataset.t==="bool") v=v==="true"; cfg[i.dataset.a].inputs[i.dataset.k]=v;});
+  await write("config/agents",cfg,"حُفظت إعدادات الوكلاء");};
+
+/* ---------- kpis, assumptions, log ---------- */
+function renderKpis(){
+  const k=S.kpis[S.run]; const n=(v,d=0)=>v==null||v===""?"—":Number(v).toLocaleString("en-US",{maximumFractionDigits:d}); const pc=v=>v==null?"—":(v*100).toFixed(0)+"٪";
+  const w=(k&&k.wow)||{}; const dl=key=>w[key]==null?"":`<div class="d" style="color:${w[key]>=0?"#2EA36A":"#B3261E"}">${w[key]>=0?"▲":"▼"} ${Math.abs(w[key]*100).toFixed(0)}٪ عن الأسبوع السابق</div>`;
+  if(!k){ $("#kpiGrid").innerHTML=`<div class="kpi" style="grid-column:1/-1"><div class="l">لا مؤشرات لهذا التشغيل بعد — تظهر هنا فور انتهاء «محلل البيانات».</div></div>`; return; }
+  $("#kpiGrid").innerHTML=`
+   <div class="kpi hero"><div class="l">كغ منقذ (توزيع + سماد)</div><div class="v">${n((k.human_kg||0)+(k.compost_kg||0))}</div><div class="l">من ${n(k.total_surplus_kg)} كغ فائض · ${pc(k.rescue_rate)}</div></div>
+   <div class="kpi"><div class="l">وجبات موجّهة للجمعيات</div><div class="v">${n(k.meals_redirected)}</div>${dl("meals_redirected")}</div>
+   <div class="kpi"><div class="l">صالح للتوزيع (كغ)</div><div class="v">${n(k.human_kg,1)}</div>${dl("human_kg")}</div>
+   <div class="kpi"><div class="l">إلى السماد (كغ)</div><div class="v">${n(k.compost_kg,1)}</div>${dl("compost_kg")}</div>
+   <div class="kpi"><div class="l">إتلاف آمن (كغ)</div><div class="v">${n(k.dispose_kg,1)}</div>${dl("dispose_kg")}</div>
+   <div class="kpi"><div class="l">نسبة الفائض من الإنتاج</div><div class="v">${pc(k.surplus_rate)}</div></div>
+   <div class="kpi"><div class="l">CO2e متجنّب (تقديري)</div><div class="v">${n(k.co2e_avoided_kg)}</div><div class="l">كغ · عامل افتراضي</div></div>
+   <div class="kpi"><div class="l">جودة البيانات</div><div class="v">${n(k.data_quality_score)}<span style="font-size:15px">/100</span></div></div>`;
+}
+function renderAssumptions(){
+  const it=S.assumptions||[];
+  $("#asmTable").innerHTML=`<tr><th>الوكيل</th><th>الحقل</th><th>الافتراض</th><th>السبب</th><th>التاريخ</th></tr>`+(it.map(a=>`<tr><td>${esc(a.agent)}</td><td>${esc(a.field)}</td><td><b>${esc(a.assumed)}</b></td><td>${esc(a.why)}</td><td>${esc((a.at||"").slice(0,10))}</td></tr>`).join("")||`<tr><td colspan="5" class="empty">لا افتراضات بعد.</td></tr>`);
+}
+function renderLog(){
+  const L=S.log.filter(l=>l.run===S.run).sort((a,b)=>String(a.at).localeCompare(String(b.at)));
+  $("#logList").innerHTML=L.map(l=>`<li><b>${esc(l.agent_label||l.agent)}</b> — ${esc(l.line)} <span class="${l.status==="ok"?"status-ok":/skip|disabled/.test(l.status)?"status-skip":/block|fail/.test(l.status)?"status-bad":""}">(${esc(l.status||"")})</span></li>`).join("")||`<li class="empty" style="list-style:none">لا خطوات مسجلة لهذا التشغيل.</li>`;
+}
+
+/* ---------- outputs drawer ---------- */
+const KIND={video:"🎬 فيديو",post:"🖼️ بوست",report:"📄 تقرير",excel:"📊 Excel",deck:"📽️ عرض",email:"✉️ رسالة",invite:"📅 دعوة",tasks:"✅ مهام",market:"🔎 السوق",minutes:"📝 محضر",card:"💚 بطاقة شكر",archive:"🗂️ أرشيف",data:"🧾 بيانات"};
+let outAgent=null;
+function renderOutputs(){
+  const run=$("#outRun").value||S.run; const outs=S.outputs.filter(o=>o.run===run);
+  $("#outCount").textContent=outs.length+" مخرج";
+  const reg=registry(); const by=id=>outs.filter(o=>o.agent===id);
+  $("#anav").innerHTML=`<button class="${!outAgent?"on":""}" data-ag="">كل الوكلاء <span class="cnt">${outs.length}</span></button>`+reg.map(a=>`<button class="${outAgent===a.id?"on":""}" data-ag="${a.id}">${esc(a.label)} <span class="cnt">${by(a.id).length}</span></button>`).join("");
+  $("#anav").querySelectorAll("button").forEach(b=>b.onclick=()=>{outAgent=b.dataset.ag||null;renderOutputs();});
+  const show=reg.filter(a=>!outAgent||a.id===outAgent);
+  $("#ogroups").innerHTML=show.map(a=>{const os=by(a.id);
+    return `<div class="agroup"><h4>${esc(a.label)} <span class="tag">${os.length}</span></h4>${os.length?`<div class="ocards">${os.map(card).join("")}</div>`:`<div class="empty">لا مخرجات بعد لهذا الوكيل في هذا التشغيل.</div>`}</div>`;}).join("");
+}
+function card(o){
+  const url=safeUrl(o.url); const blob=o.asset_id?("/_blob/"+encodeURIComponent(o.asset_id)):"";
+  let media="";
+  if(blob&&(o.kind==="post"||o.kind==="card")) media=`<img src="${blob}" alt="${esc(o.title)}">`;
+  if(blob&&o.kind==="video") media=`<video src="${blob}" controls playsinline></video>`;
+  const st=o.status==="skipped"?'<span class="status-skip">متخطّى</span>':o.status&&o.status.startsWith("ok")?"":`<span class="status-bad">${esc(o.status)}</span>`;
+  return `<div class="oc"><div class="k">${KIND[o.kind]||esc(o.kind)} ${st}</div><div class="tt">${esc(o.title)}</div>${media}<div class="pv">${esc(o.preview)}</div>
+    <div class="row">${url?`<a href="${esc(url)}" target="_blank" rel="noopener">فتح ↗</a>`:""}${blob&&!media?`<a href="${blob}" target="_blank" rel="noopener">عرض الملف</a>`:""}</div></div>`;
+}
+$("#openOut").onclick=()=>{ $("#outRun").value=S.run||""; $("#out").classList.add("open"); renderOutputs(); location.hash="outputs"; };
+$("#closeOut").onclick=()=>{ $("#out").classList.remove("open"); history.replaceState(null,"",location.pathname); };
+$("#outRun").onchange=renderOutputs;
+$("#out").onclick=e=>{ if(e.target.id==="out") $("#closeOut").click(); };
+
+/* ---------- db plumbing ---------- */
+async function write(path,data,msg){
+  if(!db) { toast("قاعدة البيانات غير متاحة في هذا العرض"); return; }
+  try{ await db.doc(path).set(JSON.parse(JSON.stringify(data))); if(msg) toast(msg); }
+  catch(e){ if(e&&e.code==="invalid_argument"){ canWrite=false; toast("ليست لديك صلاحية التعديل — عرض فقط"); } else toast("تعذّر الحفظ: "+(e&&(e.message||e.code))); }
+}
+function renderAll(){ renderCompany(); renderPeople(); renderAgents(); renderAssumptions(); renderRunSel(); if($("#out").classList.contains("open")) renderOutputs(); }
+renderAll();
+
+(async()=>{
+  const conn=$("#conn");
+  if(!window.claude||!window.claude.use){ conn.style.display="block"; conn.textContent="هذه المعاينة بلا قاعدة بيانات — افتحي اللوحة من رابطها في Claude."; return; }
+  const timer=setTimeout(()=>{conn.style.display="block";conn.textContent="جارٍ الاتصال بقاعدة البيانات… قد تكون البيانات غير محدّثة.";},10000);
+  db=await claude.use("db"); assets=await claude.use("assets"); user=await claude.use("user");
+  if(!db){ clearTimeout(timer); conn.style.display="block"; conn.textContent="قاعدة البيانات غير متاحة (سجّلي الدخول)."; return; }
+  try{ if(user&&user.can){ const w=await user.can("data.write"); if(w===false){canWrite=false;} } }catch(e){}
+  if(!canWrite){ conn.style.display="block"; conn.textContent="عرض فقط — التعديل لمالكة اللوحة والمحررين."; }
+  const err=e=>{ conn.style.display="block"; conn.textContent="انقطع الاتصال بقاعدة البيانات ("+(e&&e.code)+")."; };
+  const sub=(path,fn)=>db.doc(path).onSnapshot(s=>{clearTimeout(timer); if(!s.metadata.fromCache&&conn.textContent.startsWith("جارٍ")) conn.style.display="none"; fn(s.exists?s.data():null);},err);
+  sub("config/company",d=>{S.company=d?structuredClone(d):{};renderCompany();});
+  sub("config/people",d=>{S.people=d?structuredClone(d):{team:[],management:[],invitees:[],donors:[],partners:[]};renderPeople();});
+  sub("config/agents",d=>{S.agents=d?structuredClone(d):{};renderAgents();});
+  sub("config/assumptions",d=>{S.assumptions=(d&&d.items)||[];renderAssumptions();});
+  const col=(c,fn)=>db.collection(c).onSnapshot(s=>{clearTimeout(timer);fn(s.docs.map(x=>({_id:x.id,...x.data()})));},err);
+  col("agents_registry",L=>{S.registry=L;renderAgents();if($("#out").classList.contains("open"))renderOutputs();});
+  col("runs",L=>{S.runs={};L.forEach(r=>S.runs[r._id]=r); if(!S.run||!S.runs[S.run]) S.run=runIds()[0]||null; renderRunSel();});
+  col("outputs",L=>{S.outputs=L.sort((a,b)=>String(a._id).localeCompare(String(b._id),undefined,{numeric:true}));if($("#out").classList.contains("open"))renderOutputs();});
+  col("kpis",L=>{S.kpis={};L.forEach(k=>S.kpis[k._id]=k);renderKpis();});
+  col("log",L=>{S.log=L;renderLog();});
+  if(location.hash==="#outputs") $("#openOut").click();
+})();
+</script>
+</body>
+</html>

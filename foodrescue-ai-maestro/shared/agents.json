@@ -1,0 +1,492 @@
+{
+  "plugin": "foodrescue-ai-maestro",
+  "agents": [
+    {
+      "id": "maestro-control-panel",
+      "label": "لوحة القيادة",
+      "phase": "setup",
+      "order": 1,
+      "depends_on": [],
+      "connector": "Artifacts DB",
+      "output_kinds": [
+        "data"
+      ],
+      "inputs": [
+        {
+          "key": "dashboard_title",
+          "label": "عنوان اللوحة",
+          "type": "text",
+          "default": "FoodRescue AI — لوحة قيادة الأوركسترا"
+        }
+      ]
+    },
+    {
+      "id": "maestro-gatekeeper",
+      "label": "حارس المدخلات",
+      "phase": "0",
+      "order": 2,
+      "depends_on": [
+        "maestro-control-panel"
+      ],
+      "connector": "Google Drive",
+      "output_kinds": [
+        "data"
+      ],
+      "inputs": [
+        {
+          "key": "custom_column_map",
+          "label": "مطابقة أعمدة مخصصة (JSON: العمود القياسي → عمود ملفك)",
+          "type": "textarea",
+          "default": ""
+        },
+        {
+          "key": "backup_to_drive",
+          "label": "نسخة احتياطية في Drive",
+          "type": "bool",
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "maestro-scribe",
+      "label": "سكرتير الاجتماع",
+      "phase": "1",
+      "order": 3,
+      "depends_on": [
+        "maestro-gatekeeper"
+      ],
+      "connector": "—",
+      "output_kinds": [
+        "minutes",
+        "tasks"
+      ],
+      "inputs": [
+        {
+          "key": "default_due_days",
+          "label": "موعد افتراضي للمهمة بلا موعد (أيام)",
+          "type": "number",
+          "default": 7
+        }
+      ]
+    },
+    {
+      "id": "maestro-analyst",
+      "label": "محلل البيانات",
+      "phase": "1",
+      "order": 4,
+      "depends_on": [
+        "maestro-gatekeeper"
+      ],
+      "connector": "—",
+      "output_kinds": [
+        "excel",
+        "report",
+        "data"
+      ],
+      "inputs": [
+        {
+          "key": "meal_kg",
+          "label": "وزن الوجبة (كغ)",
+          "type": "number",
+          "default": 0.4
+        },
+        {
+          "key": "co2e_per_kg",
+          "label": "عامل CO2e لكل كغ منقذ",
+          "type": "number",
+          "default": 2.5
+        },
+        {
+          "key": "room_temp_max_h",
+          "label": "أقصى ساعات للمطبوخ بحرارة الغرفة",
+          "type": "number",
+          "default": 2
+        },
+        {
+          "key": "cooked_chilled_max_h",
+          "label": "أقصى ساعات للمطبوخ المبرد/الساخن",
+          "type": "number",
+          "default": 48
+        },
+        {
+          "key": "min_quality_score",
+          "label": "الحد الأدنى لجودة البيانات",
+          "type": "number",
+          "default": 60
+        },
+        {
+          "key": "management_questions",
+          "label": "أسئلة الإدارة (سطر لكل سؤال)",
+          "type": "textarea",
+          "default": "ما الصنف الأكثر هدرًا؟\nكم وجبة وُجهت للجمعيات؟"
+        }
+      ]
+    },
+    {
+      "id": "maestro-scout",
+      "label": "راصد السوق",
+      "phase": "1",
+      "order": 5,
+      "depends_on": [
+        "maestro-gatekeeper"
+      ],
+      "connector": "Perplexity (احتياطي: بحث الويب)",
+      "output_kinds": [
+        "market"
+      ],
+      "inputs": [
+        {
+          "key": "keywords",
+          "label": "كلمات البحث",
+          "type": "textarea",
+          "default": "food waste Palestine\nهدر الطعام فلسطين\nبنك الطعام\nfood rescue app\nسماد عضوي فلسطين"
+        },
+        {
+          "key": "competitors",
+          "label": "منافسون معروفون",
+          "type": "textarea",
+          "default": "Too Good To Go\nOLIO\nWinnow\nLeanpath\nFoodCloud"
+        },
+        {
+          "key": "window_days",
+          "label": "نافذة الأخبار (أيام)",
+          "type": "number",
+          "default": 30
+        }
+      ]
+    },
+    {
+      "id": "maestro-rewards",
+      "label": "مسؤول الولاء",
+      "phase": "2",
+      "order": 6,
+      "depends_on": [
+        "maestro-analyst"
+      ],
+      "connector": "—",
+      "output_kinds": [
+        "card",
+        "data"
+      ],
+      "inputs": [
+        {
+          "key": "per_kg_human",
+          "label": "نقاط لكل كغ للتوزيع",
+          "type": "number",
+          "default": 1
+        },
+        {
+          "key": "per_kg_compost",
+          "label": "نقاط لكل كغ سماد",
+          "type": "number",
+          "default": 0.5
+        },
+        {
+          "key": "suspicious_dispose_share",
+          "label": "نسبة إتلاف تعلّق المؤسسة",
+          "type": "number",
+          "default": 0.3
+        }
+      ]
+    },
+    {
+      "id": "maestro-tasker",
+      "label": "موزّع المهام",
+      "phase": "2",
+      "order": 7,
+      "depends_on": [
+        "maestro-scribe"
+      ],
+      "connector": "monday.com",
+      "output_kinds": [
+        "tasks"
+      ],
+      "inputs": [
+        {
+          "key": "board_id",
+          "label": "معرّف لوحة monday (فارغ = تُنشأ)",
+          "type": "text",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "id": "maestro-studio",
+      "label": "مصمم البوستات",
+      "phase": "3",
+      "order": 8,
+      "depends_on": [
+        "maestro-analyst",
+        "maestro-rewards"
+      ],
+      "connector": "Canva",
+      "output_kinds": [
+        "post"
+      ],
+      "inputs": [
+        {
+          "key": "brand_kit_id",
+          "label": "Brand Kit في Canva (اختياري)",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "hashtags",
+          "label": "وسوم ثابتة",
+          "type": "text",
+          "default": "#FoodRescueAI #لا_للهدر #إنقاذ_الطعام"
+        }
+      ]
+    },
+    {
+      "id": "maestro-presenter",
+      "label": "معدّ العرض",
+      "phase": "3",
+      "order": 9,
+      "depends_on": [
+        "maestro-analyst",
+        "maestro-scribe",
+        "maestro-scout"
+      ],
+      "connector": "Gamma",
+      "output_kinds": [
+        "deck"
+      ],
+      "inputs": [
+        {
+          "key": "theme",
+          "label": "ثيم Gamma (اختياري)",
+          "type": "text",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "id": "maestro-filmmaker",
+      "label": "وكيل الفيديو",
+      "phase": "3",
+      "order": 10,
+      "depends_on": [
+        "maestro-analyst"
+      ],
+      "connector": "HyperFrames by HeyGen",
+      "output_kinds": [
+        "video"
+      ],
+      "inputs": [
+        {
+          "key": "duration_s",
+          "label": "المدة (ثانية)",
+          "type": "number",
+          "default": 35
+        },
+        {
+          "key": "cta",
+          "label": "الدعوة للإجراء",
+          "type": "text",
+          "default": "سجّل مؤسستك وأنقذ فائضك"
+        }
+      ]
+    },
+    {
+      "id": "maestro-vault",
+      "label": "أمين الأرشيف",
+      "phase": "4",
+      "order": 11,
+      "depends_on": [],
+      "connector": "Google Drive",
+      "output_kinds": [
+        "archive"
+      ],
+      "inputs": [
+        {
+          "key": "drive_folder",
+          "label": "مجلد Drive",
+          "type": "text",
+          "default": "FoodRescue AI — Orchestra"
+        }
+      ]
+    },
+    {
+      "id": "maestro-scheduler",
+      "label": "مُجدول الاجتماعات",
+      "phase": "5",
+      "order": 12,
+      "depends_on": [
+        "maestro-scribe"
+      ],
+      "connector": "Google Calendar",
+      "output_kinds": [
+        "invite"
+      ],
+      "inputs": [
+        {
+          "key": "add_meet",
+          "label": "إضافة Google Meet",
+          "type": "bool",
+          "default": true
+        }
+      ]
+    },
+    {
+      "id": "maestro-courier",
+      "label": "منسق البريد",
+      "phase": "5",
+      "order": 13,
+      "depends_on": [
+        "maestro-scheduler"
+      ],
+      "connector": "Gmail",
+      "output_kinds": [
+        "email"
+      ],
+      "inputs": [
+        {
+          "key": "email_mode",
+          "label": "وضع البريد (send = إرسال تلقائي / drafts = مسودات)",
+          "type": "select",
+          "options": [
+            "send",
+            "drafts"
+          ],
+          "default": "send"
+        }
+      ]
+    },
+    {
+      "id": "maestro-showcase",
+      "label": "واجهة المخرجات",
+      "phase": "after-each",
+      "order": 14,
+      "depends_on": [],
+      "connector": "Artifacts DB",
+      "output_kinds": [
+        "data"
+      ],
+      "inputs": [
+        {
+          "key": "preview_chars",
+          "label": "طول المعاينة",
+          "type": "number",
+          "default": 600
+        }
+      ]
+    },
+    {
+      "id": "maestro-agent-host",
+      "label": "مضيف الوكلاء",
+      "phase": "on-demand",
+      "order": 15,
+      "depends_on": [],
+      "connector": "Artifacts DB",
+      "output_kinds": [
+        "data"
+      ],
+      "inputs": [
+        {
+          "key": "new_agent_request",
+          "label": "اطلبي وكيلًا جديدًا (الاسم + ماذا يفعل + الموصل)",
+          "type": "textarea",
+          "default": ""
+        }
+      ]
+    },
+    {
+      "id": "maestro-app-designer",
+      "label": "مصمم التطبيق",
+      "phase": "4",
+      "order": 16,
+      "depends_on": [
+        "maestro-analyst",
+        "maestro-rewards",
+        "maestro-studio",
+        "maestro-presenter",
+        "maestro-filmmaker",
+        "maestro-tasker"
+      ],
+      "connector": "Claude Design + Netlify",
+      "output_kinds": [
+        "data"
+      ],
+      "inputs": [
+        {
+          "key": "app_title",
+          "label": "اسم التطبيق",
+          "type": "text",
+          "default": "FoodRescue AI — منقذ فائض الطعام"
+        },
+        {
+          "key": "app_url",
+          "label": "رابط التطبيق (يُملأ تلقائيًا بعد أول نشر)",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "design_project_id",
+          "label": "معرّف مشروع Claude Design (يُملأ تلقائيًا)",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "whatsapp_number",
+          "label": "رقم واتساب العام للتواصل (رقم المؤسسة لا شخص)",
+          "type": "text",
+          "default": ""
+        },
+        {
+          "key": "redesign",
+          "label": "إعادة التصميم من جديد في التشغيل القادم (مرة واحدة)",
+          "type": "bool",
+          "default": false
+        }
+      ]
+    },
+    {
+      "id": "maestro-git-keeper",
+      "label": "أمين المستودع",
+      "phase": "6",
+      "order": 17,
+      "depends_on": [
+        "maestro-gatekeeper",
+        "maestro-vault"
+      ],
+      "connector": "GitHub (Claude GitHub App) + git",
+      "output_kinds": [
+        "repo_commit",
+        "log"
+      ],
+      "inputs": [
+        {
+          "key": "repo",
+          "label": "المستودع owner/name",
+          "type": "text",
+          "default": "ilhammashal-svg/FoodRescue-AI-2"
+        },
+        {
+          "key": "branch",
+          "label": "الفرع",
+          "type": "text",
+          "default": "main"
+        },
+        {
+          "key": "include_outputs",
+          "label": "رفع مخرجات التشغيل الآمنة",
+          "type": "select",
+          "default": "yes"
+        },
+        {
+          "key": "scrub_private",
+          "label": "إزالة الإيميلات والهواتف والروابط (مستودع عام)",
+          "type": "select",
+          "default": "yes"
+        },
+        {
+          "key": "drive_fallback",
+          "label": "نسخة git bundle على Drive إن فشل الرفع",
+          "type": "select",
+          "default": "yes"
+        }
+      ]
+    }
+  ]
+}

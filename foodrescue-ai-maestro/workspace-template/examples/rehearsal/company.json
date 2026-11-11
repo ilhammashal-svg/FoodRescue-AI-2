@@ -1,0 +1,39 @@
+{
+ "name": "FoodRescue AI",
+ "name_ar": "منقذ فائض الطعام",
+ "product": "لوحة ذكية لتسجيل فائض الطعام وتصنيفه (توزيع/سماد/إتلاف) ومطابقته بالجهات المستقبلة",
+ "tagline": "كل فائض له مسار… والقرار بشري",
+ "sector": "إدارة فائض الطعام والاستدامة",
+ "city": "القدس",
+ "regions": [
+  "القدس",
+  "رام الله",
+  "بيت لحم",
+  "الخليل",
+  "نابلس"
+ ],
+ "currency": "ILS",
+ "timezone": "Asia/Jerusalem",
+ "brand": {
+  "primary": "#1F7A4D",
+  "secondary": "#F2A93B",
+  "accent": "#0E3B2E",
+  "font": "Tajawal",
+  "tone": "دافئة، موثوقة، عملية",
+  "banned_claims": [
+   "آمن 100٪",
+   "معتمد صحيًا",
+   "شهادة صلاحية",
+   "توصيل مضمون"
+  ]
+ },
+ "drive_folder": "FoodRescue AI — Orchestra",
+ "monday_board_id": "",
+ "meal_kg": 0.4,
+ "co2e_per_kg": 2.5,
+ "automation": {
+  "email_mode": "send",
+  "calendar_mode": "invite",
+  "social_mode": "ready_to_publish"
+ }
+}

@@ -1,0 +1,158 @@
+{
+ "tool_used": "WebSearch (Perplexity غير متصل في هذه الجلسة)",
+ "window_days": 30,
+ "competitors": [
+  {
+   "name": "Laheq Halak (لاحق حالك)",
+   "tier": "direct",
+   "model": "تطبيق يربط البائعين بفائض/قرب انتهاء بالمستهلكين بسعر أقل",
+   "price": "غير منشور",
+   "regions": "فلسطين (الضفة)",
+   "strength": "محلي، يستهدف البائع والمستهلك",
+   "gap": "لا تصنيف ثلاثي ولا مسار سماد ولا توجيه للجمعيات",
+   "url": "https://solve.mit.edu/solutions/98897"
+  },
+  {
+   "name": "Too Good To Go",
+   "tier": "adjacent",
+   "model": "سوق Surprise Bags؛ عمولة لكل كيس + رسم سنوي على المتجر",
+   "price": "≈1.79$ عمولة/كيس + ≈89$ سنويًا (الولايات المتحدة)",
+   "regions": "عشرات الدول",
+   "strength": "حجم ضخم وشبكة أعمال",
+   "gap": "بيع لا تبرع؛ لا مسار سماد/إتلاف موثق",
+   "url": "https://moneypantry.com/too-good-to-go-review/"
+  },
+  {
+   "name": "OLIO",
+   "tier": "adjacent",
+   "model": "مشاركة مجانية + برنامج Food Waste Heroes مدفوع للشركات + اشتراك premium",
+   "price": "الاشتراك الفردي 1.99 جنيه/شهر؛ رسوم للشركات لكل استلام",
+   "regions": "عشرات الدول",
+   "strength": "متطوعون مدربون على السلامة",
+   "gap": "يعتمد على متطوعين؛ ليس لوحة تحكم مؤسسية",
+   "url": "https://sp-edge.com/companies/448556"
+  },
+  {
+   "name": "Winnow",
+   "tier": "adjacent",
+   "model": "عتاد + برمجيات AI لقياس هدر المطابخ (اشتراك)",
+   "price": "غير منشور",
+   "regions": "قرابة 100 دولة",
+   "strength": "دليل أثر قوي في الفنادق",
+   "gap": "قياس ومنع، لا توجيه للفائض نحو جمعيات/سماد",
+   "url": "https://www.hoteldive.com/press-release/20260429-hospitality-operators-using-winnows-ai-now-saving-100-million-in-food-was-1/"
+  },
+  {
+   "name": "Leanpath",
+   "tier": "adjacent",
+   "model": "منصة تتبع هدر (اشتراك أو شراء)",
+   "price": "غير منشور",
+   "regions": "دولي",
+   "strength": "تستهدف الجامعات والمقاصف والفنادق",
+   "gap": "لا مطابقة مع الجهات المستقبلة",
+   "url": "https://agritechobservatory.review.fao.org/ar/leanpath"
+  },
+  {
+   "name": "Jerusalem Food Rescuers",
+   "tier": "partner",
+   "model": "منظمة إنقاذ فائض الخضار من سوق الجملة وتوزيعه",
+   "price": "—",
+   "regions": "القدس",
+   "strength": "10–15 طنًا أسبوعيًا عبر 28 موقعًا",
+   "gap": "تركيز على سوق الجملة لا المطابخ المؤسسية",
+   "url": "https://jerusalemfoundation.org/?p=24824"
+  }
+ ],
+ "numbers": [
+  {
+   "value": 1.05,
+   "unit": "مليار طن",
+   "claim": "هدر الطعام عالميًا في 2022",
+   "source_name": "UNEP Food Waste Index 2024 (via Rural 21)",
+   "url": "https://www.rural21.com/english/publications/detail/article/food-waste-index-report-2024.html",
+   "date_published": "2024-03",
+   "accessed": "2026-11-09"
+  },
+  {
+   "value": 28,
+   "unit": "٪",
+   "claim": "حصة خدمات الطعام من الهدر العالمي",
+   "source_name": "UNEP Food Waste Index 2024 (via Rural 21)",
+   "url": "https://www.rural21.com/english/publications/detail/article/food-waste-index-report-2024.html",
+   "date_published": "2024-03",
+   "accessed": "2026-11-09"
+  },
+  {
+   "value": 46,
+   "unit": "٪",
+   "claim": "نسبة العضوي من النفايات الصلبة في المجتمعات المحلية الفلسطينية",
+   "source_name": "MIT Solve — Laheq Halak",
+   "url": "https://solve.mit.edu/solutions/98897",
+   "date_published": "2025",
+   "accessed": "2026-11-09"
+  },
+  {
+   "value": "5–15",
+   "unit": "٪",
+   "claim": "نسبة ما يُهدر من مشتريات المطابخ التجارية عادة",
+   "source_name": "Winnow (Hotel Dive)",
+   "url": "https://www.hoteldive.com/press-release/20260429-hospitality-operators-using-winnows-ai-now-saving-100-million-in-food-was-1/",
+   "date_published": "2026-04-29",
+   "accessed": "2026-11-09"
+  },
+  {
+   "value": "53–55",
+   "unit": "٪",
+   "claim": "حصة الإنتاج الزائد من هدر مطابخ الضيافة",
+   "source_name": "Leanpath (Green Lodging News / Hotel Business)",
+   "url": "https://www.greenlodgingnews.com/?p=33560",
+   "date_published": "—",
+   "accessed": "2026-11-09"
+  },
+  {
+   "value": 2.7,
+   "unit": "كغ CO2e",
+   "claim": "انبعاثات متجنبة لكل كيس 1 كغ يُنقذ (تقدير TGTG — يدعم عامل 2.5 الافتراضي)",
+   "source_name": "Too Good To Go",
+   "url": "https://www.toogoodtogo.com/en-nz/press/launch",
+   "date_published": "2026",
+   "accessed": "2026-11-09"
+  }
+ ],
+ "news": [
+  {
+   "title": "Winnow: مشغلو الضيافة يوفرون 100 مليون دولار سنويًا من خفض الهدر",
+   "date": "2026-04-29",
+   "url": "https://www.hoteldive.com/press-release/20260429-hospitality-operators-using-winnows-ai-now-saving-100-million-in-food-was-1/"
+  },
+  {
+   "title": "Jerusalem Food Rescuers: 7 سنوات وشبكة 28 موقع توزيع",
+   "date": "2026-01-19",
+   "url": "https://jerusalemfoundation.org/?p=24824"
+  },
+  {
+   "title": "بنك الإمارات للطعام يطلق حملة 8 ملايين وجبة من الفائض في رمضان",
+   "date": "2026-02-19",
+   "url": "https://www.dm.gov.ae/uae-food-bank-ramadan-campaign-launched/?lang=ar"
+  }
+ ],
+ "regulations": [
+  {
+   "note": "لم يُعثر على مصدر منشور لتشريع فلسطيني خاص بالتبرع بالغذاء في هذا الرصد — يلزم بحث موجّه/استشارة",
+   "url": ""
+  },
+  {
+   "note": "سياسة جامعة فلسطين الأهلية لإدارة هدر الطعام في الحرم (شراكات بنوك طعام وتسميد) — نموذج مؤسسي محلي",
+   "url": "https://paluniv.edu.ps/eng/wp-content/uploads/2023/12/PS-07-SDG02-1.pdf"
+  }
+ ],
+ "delta": [
+  "أول رصد — لا مقارنة"
+ ],
+ "opportunity": "لا يجمع أي حل محلي مرصود بين التصنيف الثلاثي (توزيع/سماد/إتلاف) والمطابقة مع الجهات الموثقة وسجل القرار البشري — وهي ميزة FoodRescue AI.",
+ "market_brief": [
+  "الخدمات الغذائية مسؤولة عن 28٪ من الهدر العالمي (UNEP 2024).",
+  "الإنتاج الزائد يسبب أكثر من نصف هدر مطابخ الضيافة (Leanpath).",
+  "الحلول المحلية تبيع الفائض؛ FoodRescue AI يوجّهه للجمعيات والسماد بقرار بشري موثق."
+ ]
+}

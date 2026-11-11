@@ -1,0 +1,189 @@
+{
+ "team": [
+  {
+   "name": "سارة",
+   "email": "user@example.com",
+   "role": "منسقة الجهات"
+  },
+  {
+   "name": "أحمد",
+   "email": "user@example.com",
+   "role": "مسؤول سلامة الغذاء"
+  },
+  {
+   "name": "لينا",
+   "email": "user@example.com",
+   "role": "محللة البيانات"
+  },
+  {
+   "name": "يوسف",
+   "email": "user@example.com",
+   "role": "التسويق"
+  }
+ ],
+ "management": [
+  {
+   "name": "د. إلهام",
+   "email": "user@example.com",
+   "role": "مديرة المشروع"
+  }
+ ],
+ "invitees": [
+  {
+   "name": "خبير السلامة",
+   "email": "user@example.com"
+  }
+ ],
+ "donors": [
+  {
+   "id": "D01",
+   "name": "مطعم الزيتونة",
+   "type": "restaurant",
+   "region": "القدس",
+   "email": "user@example.com",
+   "consent_public": "yes"
+  },
+  {
+   "id": "D02",
+   "name": "مقصف جامعة القدس",
+   "type": "canteen",
+   "region": "القدس",
+   "email": "user@example.com",
+   "consent_public": "no"
+  },
+  {
+   "id": "D03",
+   "name": "فندق الأسوار",
+   "type": "hotel",
+   "region": "القدس",
+   "email": "user@example.com",
+   "consent_public": "yes"
+  },
+  {
+   "id": "D04",
+   "name": "مقصف مدرسة الأمل",
+   "type": "school",
+   "region": "رام الله",
+   "email": "user@example.com",
+   "consent_public": "no"
+  },
+  {
+   "id": "D05",
+   "name": "مخبز السنابل",
+   "type": "bakery",
+   "region": "بيت لحم",
+   "email": "user@example.com",
+   "consent_public": "yes"
+  }
+ ],
+ "partners": [
+  {
+   "id": "P01",
+   "name": "جمعية رعاية الأيتام (وهمية)",
+   "type": "orphanage",
+   "region": "القدس",
+   "email": "user@example.com",
+   "accepts": [
+    "cooked",
+    "packaged",
+    "bakery",
+    "dairy"
+   ],
+   "min_qty": 5,
+   "capacity_kg": 60,
+   "pickup_window": "17:00-19:00",
+   "transport": "yes",
+   "verified": "yes",
+   "last_verified": "2026-10-20"
+  },
+  {
+   "id": "P02",
+   "name": "بنك الطعام المجتمعي (وهمي)",
+   "type": "food_bank",
+   "region": "القدس",
+   "email": "user@example.com",
+   "accepts": [
+    "all"
+   ],
+   "min_qty": 10,
+   "capacity_kg": 200,
+   "pickup_window": "16:00-20:00",
+   "transport": "yes",
+   "verified": "yes",
+   "last_verified": "2026-10-01"
+  },
+  {
+   "id": "P03",
+   "name": "جمعية الخير (وهمية)",
+   "type": "charity",
+   "region": "رام الله",
+   "email": "user@example.com",
+   "accepts": [
+    "cooked",
+    "packaged",
+    "bakery",
+    "produce"
+   ],
+   "min_qty": 3,
+   "capacity_kg": 40,
+   "pickup_window": "15:00-18:00",
+   "transport": "no",
+   "verified": "no",
+   "last_verified": ""
+  },
+  {
+   "id": "P04",
+   "name": "شركة السماد الأخضر (وهمية)",
+   "type": "compost",
+   "region": "القدس",
+   "email": "user@example.com",
+   "accepts": [
+    "produce",
+    "bakery",
+    "prep_scraps",
+    "cooked"
+   ],
+   "min_qty": 10,
+   "capacity_kg": 500,
+   "pickup_window": "08:00-12:00",
+   "transport": "yes",
+   "verified": "yes",
+   "last_verified": "2026-09-15"
+  },
+  {
+   "id": "P05",
+   "name": "نقطة جمع بلدية بيت لحم (وهمية)",
+   "type": "collection_point",
+   "region": "بيت لحم",
+   "email": "user@example.com",
+   "accepts": [
+    "produce",
+    "bakery",
+    "prep_scraps"
+   ],
+   "min_qty": 1,
+   "capacity_kg": 100,
+   "pickup_window": "07:00-14:00",
+   "transport": "no",
+   "verified": "yes",
+   "last_verified": "2026-10-05"
+  },
+  {
+   "id": "P06",
+   "name": "تكية رام الله (وهمية)",
+   "type": "charity",
+   "region": "رام الله",
+   "email": "user@example.com",
+   "accepts": [
+    "cooked",
+    "bakery"
+   ],
+   "min_qty": 5,
+   "capacity_kg": 50,
+   "pickup_window": "12:00-14:00",
+   "transport": "yes",
+   "verified": "yes",
+   "last_verified": "2026-10-25"
+  }
+ ]
+}

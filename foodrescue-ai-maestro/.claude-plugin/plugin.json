@@ -1,0 +1,16 @@
+{
+  "name": "foodrescue-ai-maestro",
+  "version": "1.0.3",
+  "description": "FoodRescue AI (منقذ فائض الطعام) agent orchestra: a manager plus 17 skills - dashboard, intake, meeting scribe, surplus analyst with 3-track classification and partner matching, market scout with sources, partner rewards, monday tasks, Canva posts, Gamma deck, HeyGen video, Calendar invite, Gmail auto-send, Drive archive, outputs showcase an agent host, and an app designer (Claude Design + Netlify, one app updated weekly on the same link), and a GitHub keeper that commits every change.",
+  "author": {
+    "name": "Dr. Elham Nabhan — FoodRescue AI"
+  },
+  "keywords": [
+    "food-waste",
+    "food-rescue",
+    "orchestra",
+    "arabic",
+    "palestine",
+    "sustainability"
+  ]
+}

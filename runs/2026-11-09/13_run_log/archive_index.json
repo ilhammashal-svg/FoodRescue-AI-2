@@ -1,0 +1,151 @@
+{
+  "run": "2026-11-09",
+  "items": [
+    {
+      "path": "01_data/original/surplus_2026-11-09.csv",
+      "kind": "data",
+      "title": "surplus-standard",
+      "url": "",
+      "agent": "maestro-gatekeeper",
+      "archived": "01_data/cleaned/2026-11-09/FR_2026-11-09_gatekeeper_surplus_2026-11-09.csv"
+    },
+    {
+      "path": "02_minutes/final/FR_2026-11-09_scribe_minutes.md",
+      "kind": "minutes",
+      "title": "minutes",
+      "url": "",
+      "agent": "maestro-scribe",
+      "archived": "02_minutes/final/2026-11-09/FR_2026-11-09_scribe_minutes.md"
+    },
+    {
+      "path": "06_tasks/2026-11-09/tasks_validated.json",
+      "kind": "tasks",
+      "title": "tasks",
+      "url": "",
+      "agent": "maestro-scribe",
+      "archived": "06_tasks/2026-11-09/FR_2026-11-09_scribe_tasks_validated.json"
+    },
+    {
+      "path": "03_reports/2026-11-09/FR_2026-11-09_analyst_surplus-log.xlsx",
+      "kind": "excel",
+      "title": "x",
+      "url": "",
+      "agent": "maestro-analyst",
+      "archived": "01_data/cleaned/2026-11-09/FR_2026-11-09_analyst_surplus-log.xlsx"
+    },
+    {
+      "path": "03_reports/2026-11-09/FR_2026-11-09_analyst_surplus-report.docx",
+      "kind": "report",
+      "title": "r",
+      "url": "",
+      "agent": "maestro-analyst",
+      "archived": "03_reports/2026-11-09/FR_2026-11-09_analyst_surplus-report_v2.docx"
+    },
+    {
+      "path": "03_reports/2026-11-09/FR_2026-11-09_analyst_surplus-report.pdf",
+      "kind": "report",
+      "title": "r",
+      "url": "",
+      "agent": "maestro-analyst",
+      "archived": "03_reports/2026-11-09/FR_2026-11-09_analyst_surplus-report_v2.pdf"
+    },
+    {
+      "path": "03_reports/2026-11-09/FR_2026-11-09_analyst_partner-matches.csv",
+      "kind": "data",
+      "title": "m",
+      "url": "",
+      "agent": "maestro-analyst",
+      "archived": "01_data/cleaned/2026-11-09/FR_2026-11-09_analyst_partner-matches.csv"
+    },
+    {
+      "path": "09_market/2026-11-09/FR_2026-11-09_scout_market-brief.md",
+      "kind": "market",
+      "title": "m",
+      "url": "",
+      "agent": "maestro-scout",
+      "archived": "09_market/2026-11-09/FR_2026-11-09_scout_market-brief_v3.md"
+    },
+    {
+      "path": "09_market/2026-11-09/market.json",
+      "kind": "market",
+      "title": "market-json",
+      "url": "",
+      "agent": "maestro-scout",
+      "archived": "09_market/2026-11-09/FR_2026-11-09_scout_market.json"
+    },
+    {
+      "path": "07_rewards/2026-11-09/rewards.json",
+      "kind": "card",
+      "title": "rewards",
+      "url": "",
+      "agent": "maestro-rewards",
+      "archived": "07_rewards/2026-11-09/FR_2026-11-09_rewards_rewards.json"
+    },
+    {
+      "path": "",
+      "kind": "tasks",
+      "title": "monday",
+      "url": "[private-link]
+      "agent": "maestro-tasker",
+      "archived": null,
+      "note": "رابط خارجي فقط"
+    },
+    {
+      "path": "04_posts/2026-11-09/FR_2026-11-09_studio_post-1-impact.png",
+      "kind": "post",
+      "title": "p",
+      "url": "",
+      "agent": "maestro-studio",
+      "archived": "04_posts/2026-11-09/FR_2026-11-09_studio_post-1-impact_v2.png"
+    },
+    {
+      "path": "04_posts/2026-11-09/FR_2026-11-09_studio_post-2-awareness.png",
+      "kind": "post",
+      "title": "p",
+      "url": "",
+      "agent": "maestro-studio",
+      "archived": "04_posts/2026-11-09/FR_2026-11-09_studio_post-2-awareness_v2.png"
+    },
+    {
+      "path": "04_posts/2026-11-09/FR_2026-11-09_studio_post-3-thanks.png",
+      "kind": "post",
+      "title": "p",
+      "url": "",
+      "agent": "maestro-studio",
+      "archived": "04_posts/2026-11-09/FR_2026-11-09_studio_post-3-thanks_v2.png"
+    },
+    {
+      "path": "04_posts/2026-11-09/posts.json",
+      "kind": "post",
+      "title": "posts",
+      "url": "",
+      "agent": "maestro-studio",
+      "archived": "04_posts/2026-11-09/FR_2026-11-09_studio_posts.json"
+    },
+    {
+      "path": "05_decks/2026-11-09/FR_2026-11-09_presenter_deck.pdf",
+      "kind": "deck",
+      "title": "pdf",
+      "url": "",
+      "agent": "maestro-presenter",
+      "archived": "05_decks/2026-11-09/FR_2026-11-09_presenter_deck_v2.pdf"
+    },
+    {
+      "path": "05_decks/2026-11-09/FR_2026-11-09_presenter_deck.pptx",
+      "kind": "deck",
+      "title": "pptx",
+      "url": "",
+      "agent": "maestro-presenter",
+      "archived": "05_decks/2026-11-09/FR_2026-11-09_presenter_deck_v2.pptx"
+    },
+    {
+      "path": "",
+      "kind": "video",
+      "title": "heygen",
+      "url": "https://app.heygen.com/projects/ece9171b-5e68-4fea-8870-9f63e1b709fc",
+      "agent": "maestro-filmmaker",
+      "archived": null,
+      "note": "رابط خارجي فقط"
+    }
+  ]
+}

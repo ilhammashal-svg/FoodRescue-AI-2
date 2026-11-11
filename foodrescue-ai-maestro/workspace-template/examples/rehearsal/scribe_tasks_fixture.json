@@ -1,0 +1,7 @@
+{"tasks":[
+ {"id":"FR-2026-11-09-01","title":"مراجعة قائمة فحص السلامة قبل كل استلام","owner_email":"user@example.com","due":"2026-11-10","priority":"عاجلة","acceptance":"قائمة فحص موقعة لكل عملية توزيع","source_line":"أحمد يراجع قائمة فحص السلامة"},
+ {"id":"FR-2026-11-09-02","title":"استكمال التحقق من جمعية الخير — رام الله","owner_email":"user@example.com","due":"2026-11-12","priority":"عالية","acceptance":"verified=yes مع تاريخ آخر تحقق في الداشبورد","source_line":"سارة تتواصل مع جمعية الخير"},
+ {"id":"FR-2026-11-09-03","title":"مقارنة الأصناف الأكثر هدرًا للإدارة","owner_email":"user@example.com","due":"2026-11-11","priority":"عالية","acceptance":"جدول أعلى 5 أصناف بأسبوعين","source_line":"لينا تجهز مقارنة"},
+ {"id":"FR-2026-11-09-04","title":"حملة توعية عن هدر الخبز","owner_email":"user@example.com","due":"","priority":"متوسطة","acceptance":"مسودة 3 بوستات","source_line":"يوسف يحضّر حملة"},
+ {"id":"FR-2026-11-09-05","title":"إيجاد شريك نقل لمنطقة بيت لحم","owner_email":"","due":"","priority":"عالية","acceptance":"جهة نقل مسجلة","source_line":"نحتاج شريك نقل — لم يُحدد مسؤول"}
+]}
